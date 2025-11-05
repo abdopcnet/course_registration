@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from course_registration import views
 
 urlpatterns = [
@@ -33,3 +35,7 @@ urlpatterns = [
     path('sections/add/', views.add_section, name='add_section'),
     path('materials/add/', views.add_material_page, name='add_material_page'),
 ]
+
+# Serve static files in development
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
