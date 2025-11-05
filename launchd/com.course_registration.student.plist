@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.course_registration.student</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <!-- Absolute path to the venv python binary -->
+    <string>/Users/abdallaswayeb/Desktop/course_registration/.venv/bin/python</string>
+    <string>/Users/abdallaswayeb/Desktop/course_registration/manage.py</string>
+    <string>runserver</string>
+    <string>127.0.0.1:8000</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/abdallaswayeb/Desktop/course_registration</string>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>KeepAlive</key>
+  <true/>
+
+  <key>StandardOutPath</key>
+  <string>/Users/abdallaswayeb/Desktop/course_registration/logs/student.stdout.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/Users/abdallaswayeb/Desktop/course_registration/logs/student.stderr.log</string>
+</dict>
+</plist>

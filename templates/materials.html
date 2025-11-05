@@ -1,0 +1,234 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>إدارة المواد</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    body {
+        font-family: "Cairo", sans-serif;
+        margin: 0;
+        background-color: #f5f7fb;
+        color: #222;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    header {
+        position: fixed; top:0; left:0; right:0;
+        height:65px; display:flex; align-items:center; justify-content:space-between;
+        background:#fff; color:#1d4ed8; padding:0 25px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.1); z-index:10;
+    }
+    .logo { display:flex; align-items:center; gap:10px; margin-left:15px; }
+    .logo img { width:65px; height:65px; }
+
+    .user-info { display:flex; align-items:center; gap:12px; padding:5px 10px; border-radius:12px; background:#e0e7ff; }
+    .user-info img { width:38px; height:38px; border-radius:50%; border:2px solid #1d4ed8; }
+    .user-info span { font-size:16px; font-weight:600; color:#1d4ed8; }
+    .logout-btn { background:none; border:none; color:#dc2626; font-size:20px; cursor:pointer; transition:0.3s; margin-left:8px; }
+    .logout-btn:hover { color:#b91c1c; }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 230px;
+        height: 100vh;
+        background: linear-gradient(180deg,#0b1a3d,#122052);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        padding-top: 80px; 
+        box-shadow: -3px 0 10px rgba(0,0,0,0.05);
+    }
+    .sidebar h3 { text-align:right; width:100%; padding-right:25px; margin-bottom:25px; font-size:18px; font-weight:600; color:#f0f0f5; }
+    .sidebar a { text-decoration:none; color:#f0f0f0; width:100%; padding:12px 25px; display:flex; align-items:center; gap:10px; transition:all 0.3s ease; font-size:16px; font-weight:500; }
+    .sidebar a i { font-size:17px; }
+    .sidebar a:hover { background-color: rgba(255,255,255,0.15); padding-right:30px; border-radius:8px; }
+    .sidebar a.active {
+        background-color: rgba(255, 255, 255, 0.25);
+        border-right: 4px solid #60a5fa;
+        padding-right: 30px;
+        border-radius: 8px 0 0 8px;
+        font-weight: 600;
+        color: #ffffff;
+    }
+    
+    .main-content {
+        margin-right: 230px; 
+        margin-top: 80px;    
+        padding: 30px;
+        height: calc(100vh - 80px);
+        overflow-y: auto;
+    }
+    .main-content h1 { font-size:26px; font-weight:700; color:#1d4ed8; margin-bottom:20px;}
+    table { width:100%; border-collapse:collapse; direction:rtl; }
+    table th, table td { padding:10px; text-align:right; border-bottom:1px solid #e5e7eb; vertical-align: middle; }
+    table th { background:#f3f4f6; font-weight:600; color:#1d4ed8; }
+    button.button { display:inline-block; background:#10b981; color:#fff; padding:8px 12px; border-radius:8px; border:none; font-weight:600; margin-bottom:12px; cursor: default; }
+
+    .action-btn {
+        border: none;
+        border-radius: 6px;
+        padding: 6px 10px;
+        color: #fff;
+        font-size: 14px;
+        cursor: default;
+        margin-left: 5px;
+    }
+    .edit-btn { background: #3b82f6; }
+    .delete-btn { background: #ef4444; }
+    .print-btn { background: #10b981; }
+    .actions { display: flex; justify-content: center; gap: 5px;  }
+    .total-count { text-align:left; margin-top:10px; font-size:13px; color:#6b7280; }
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: calc(100vh - 150px);
+        color: #374151;
+        font-weight: 600;
+        gap: 15px;
+        text-align: center;
+    }
+    .empty-state p {
+        font-size: 18px;
+        color: #374151;
+    }
+    .empty-state .button {
+        background: #10b981;
+        color: #fff;
+        padding: 10px 18px;
+        font-size: 15px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+    .empty-state .button:hover {
+        background: #059669;
+        transform: translateY(-2px);
+    }
+</style>
+</head>
+<body>
+    
+
+<header>
+    <div class="user-info">
+        <img src="{% static 'images/user.png' %}" alt="User">
+        <span>عبداللة سويب</span>
+        <a href="{% url 'logout' %}" class="logout-btn" title="تسجيل الخروج">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </a>
+    </div>
+
+    <div class="logo">
+        <img src="{% static 'images/logoMisurataUni.png' %}" alt="Logo">
+    </div>
+</header>
+
+<div class="sidebar">
+    <h3>القائمة</h3>
+    <a href="{% url 'admin_dashbord' %}" class="{% if '/admin_dashbord' in request.path %}active{% endif %}"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a>
+    <a href="{% url 'materials_page' %}" class="{% if '/materials' in request.path %}active{% endif %}"><i class="fa-solid fa-book"></i> المواد</a>
+    <a href="{% url 'students_page' %}" class="{% if '/students' in request.path %}active{% endif %}"><i class="fa-solid fa-user-graduate"></i> الطلاب</a>
+    <a href="{% url 'sections_page' %}" class="{% if '/sections' in request.path %}active{% endif %}"><i class="fa-solid fa-layer-group"></i> الأقسام</a>
+    <a href="{% url 'reports_page' %}" class="{% if '/reports' in request.path %}active{% endif %}"><i class="fa-solid fa-chart-line"></i> التقارير</a>
+</div>
+
+<div class="main-content">
+    <h1>إدارة المواد</h1>
+
+    {% if messages %}
+            <div style="margin-bottom:20px;">
+                {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                        <div style="padding:12px 18px; border-radius:8px; margin-bottom:10px; font-weight:500; font-size:15px;
+                                    background-color:#dcfce7; color:#166534; border:1px solid #86efac;">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+    {% endif %}
+
+    {% if materials %}
+    <div style="text-align: left; margin-bottom:12px;">
+        <a href="{% url 'add_material_page' %}">
+            <button class="button">
+                <i class="fa-solid fa-plus"></i>  اضافة مادة جديدة
+            </button>
+        </a>
+    </div>
+
+    <div style="margin-top:10px; background:#fff; padding:20px; border-radius:12px; box-shadow:0 3px 12px rgba(0,0,0,0.06)">
+
+        <form method="GET" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; background:#f3f4f6; padding:15px; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 15px;">
+            <input type="text" name="code" placeholder="رمز المادة"
+                value="{{ request.GET.code }}"
+                style="padding:8px 12px; border-radius:8px; border:1px solid #cbd5e1; outline:none; width:150px; transition:0.2s;">
+            
+            <input type="text" name="name" placeholder="اسم المادة"
+                value="{{ request.GET.name }}"
+                style="padding:8px 12px; border-radius:8px; border:1px solid #cbd5e1; outline:none; width:200px; transition:0.2s;">
+            
+            <select name="hours" style="padding:8px 12px; border-radius:8px; border:1px solid #cbd5e1; outline:none; transition:0.2s;">
+                <option value="">كل عدد الساعات</option>
+                <option value="1" {% if request.GET.hours == '1' %}selected{% endif %}>1</option>
+                <option value="2" {% if request.GET.hours == '2' %}selected{% endif %}>2</option>
+                <option value="3" {% if request.GET.hours == '3' %}selected{% endif %}>3</option>
+                <option value="4" {% if request.GET.hours == '4' %}selected{% endif %}>4</option>
+            </select>
+
+            <button type="submit" class="button"
+                style="background:#3b82f6; color:#fff; padding:9px 18px; border-radius:8px; border:none; cursor:pointer; font-weight:600; transition:0.2s; margin-top:10px;">
+                فلتر
+            </button>
+            
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>رمز المادة</th>
+                    <th>اسم المادة</th>
+                    <th>عدد الساعات</th>
+                    <th style="text-align:center;">الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in materials %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ m.code }}</td>
+                    <td>{{ m.name }}</td>
+                    <td>{{ m.hours }}</td>
+                    <td class="actions">
+                        <button class="action-btn edit-btn" title="تعديل"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="action-btn delete-btn" title="حذف"><i class="fa-solid fa-trash"></i></button>
+                        <button class="action-btn print-btn" title="طباعة"><i class="fa-solid fa-print"></i></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total-count">
+            عدد المواد: {{ materials|length }}
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>لا توجد مواد حتى الآن.</p>
+        <button class="button"><i class="fa-solid fa-plus"></i> إضافة مادة جديدة</button>
+    </div>
+    {% endif %}
+</div>
+
+</body>
+</html>

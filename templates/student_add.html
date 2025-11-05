@@ -1,0 +1,229 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>إضافة طالب جديد</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    body {
+        font-family: "Cairo", sans-serif;
+        margin: 0;
+        background-color: #f5f7fb;
+        color: #222;
+        height: 100vh;
+        overflow: hidden;
+    }
+    header {
+        position: fixed; top:0; left:0; right:0;
+        height:65px; display:flex; align-items:center; justify-content:space-between;
+        background:#fff; color:#1d4ed8; padding:0 25px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.1); z-index:10;
+    }
+    .logo { display:flex; align-items:center; gap:10px; margin-left:15px; }
+    .logo img { width:65px; height:65px; }
+
+    .user-info { display:flex; align-items:center; gap:12px; padding:5px 10px; border-radius:12px; background:#e0e7ff; }
+    .user-info img { width:38px; height:38px; border-radius:50%; border:2px solid #1d4ed8; }
+    .user-info span { font-size:16px; font-weight:600; color:#1d4ed8; }
+    .logout-btn { background:none; border:none; color:#dc2626; font-size:20px; cursor:pointer; transition:0.3s; margin-left:8px; }
+    .logout-btn:hover { color:#b91c1c; }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 230px;
+        height: 100vh;
+        background: linear-gradient(180deg,#0b1a3d,#122052);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        padding-top: 80px; 
+        box-shadow: -3px 0 10px rgba(0,0,0,0.05);
+    }
+    .sidebar h3 { text-align:right; width:100%; padding-right:25px; margin-bottom:25px; font-size:18px; font-weight:600; color:#f0f0f5; }
+    .sidebar a { text-decoration:none; color:#f0f0f0; width:100%; padding:12px 25px; display:flex; align-items:center; gap:10px; transition:all 0.3s ease; font-size:16px; font-weight:500; }
+    .sidebar a i { font-size:17px; }
+    .sidebar a:hover { background-color: rgba(255,255,255,0.15); padding-right:30px; border-radius:8px; }
+    .sidebar a.active {
+        background-color: rgba(255, 255, 255, 0.25);
+        border-right: 4px solid #60a5fa;
+        padding-right: 30px;
+        border-radius: 8px 0 0 8px;
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+    .main-content {
+        margin-right: 230px; 
+        margin-top: 80px;    
+        padding: 30px;
+        height: calc(100vh - 80px);
+        overflow-y: auto;
+    }
+
+    .main-content h1 {
+        font-size:26px;
+        font-weight:700;
+        color:#1d4ed8;
+        margin-bottom:20px;
+    }
+
+    .section-box {
+        margin-bottom:20px;
+        background:#fff;
+        padding:20px;
+        border-radius:12px;
+        box-shadow:0 3px 12px rgba(0,0,0,0.06);
+        max-width: 100%;
+    }
+
+    /* تنسيق الحقول بنفس أسلوب صفحة القسم */
+    .field-group {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    .field-group > div {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    label {
+        display:block;
+        font-weight:600;
+        margin-bottom:6px;
+        color:#1d4ed8;
+    }
+
+    input[type=text],
+    input[type=email],
+    input[type=password],
+    select {
+        width: 85%;
+        padding:8px 10px;
+        border-radius:6px;
+        border:1px solid #ccc;
+        font-size:14px;
+        box-sizing:border-box;
+        transition:0.3s;
+        background-color: #f9fafb;
+    }
+
+    input:focus, select:focus {
+        border-color:#2563eb;
+        box-shadow:0 0 5px rgba(37,99,235,0.2);
+        outline:none;
+        background-color: #fff;
+    }
+
+    button.button {
+        display:inline-block;
+        background:#10b981;
+        color:#fff;
+        padding:10px 16px;
+        border-radius:8px;
+        border:none;
+        font-weight:600;
+        cursor:pointer;
+        margin-top:25px;
+        
+        transition:0.3s;
+    }
+    button.button:hover {
+        background:#0ea472;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="user-info">
+        <img src="{% static 'images/user.png' %}" alt="User">
+        <span>{{ request.user.get_full_name|default:request.user.username }}</span>
+        <a href="{% url 'logout' %}" class="logout-btn" title="تسجيل الخروج">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </a>
+    </div>
+
+    <div class="logo">
+        <img src="{% static 'images/logoMisurataUni.png' %}" alt="Logo">
+    </div>
+</header>
+
+<div class="sidebar">
+    <h3>القائمة</h3>
+    <a href="{% url 'admin_dashbord' %}"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a>
+    <a href="{% url 'materials_page' %}"><i class="fa-solid fa-book"></i> المواد</a>
+    <a href="{% url 'students_page' %}" class="active"><i class="fa-solid fa-user-graduate"></i> الطلاب</a>
+    <a href="{% url 'sections_page' %}"><i class="fa-solid fa-layer-group"></i> الأقسام</a>
+    <a href="{% url 'reports_page' %}"><i class="fa-solid fa-chart-line"></i> التقارير</a>
+</div>
+
+<div class="main-content">
+    <h1>إضافة طالب جديد</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="section-box">
+            <!-- الصف الأول: رقم القيد – اسم الطالب – القسم -->
+            <div class="field-group">
+                <div>
+                    <label>رقم القيد:</label>
+                    <input type="text" name="id_student" placeholder="أدخل رقم القيد">
+                </div>
+                <div>
+                    <label>اسم الطالب:</label>
+                    <input type="text" name="name" placeholder="أدخل اسم الطالب">
+                </div>
+                <div>
+                    <label>القسم:</label>
+                    <select name="section">
+                        {% for s in sections %}
+                            <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- الصف الثاني: البريد الإلكتروني – كلمة المرور -->
+            <div class="field-group" style="margin-top:15px;">
+                <div>
+                    <label>البريد الإلكتروني:</label>
+                    <input type="email" name="email" placeholder="example@email.com">
+                </div>
+                <div>
+                    <label>كلمة المرور:</label>
+                    <div style="position:relative;">
+                        <input type="password" name="password" id="password-field" placeholder="********" style="width:85%; padding-right:35px;">
+                        <button type="button" onclick="togglePassword()" style="position:absolute; right:5px; top:5px; background:none; border:none; cursor:pointer;">
+                            <i id="toggle-icon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="button"><i class="fa-solid fa-user-plus"></i> إضافة الطالب</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function togglePassword() {
+    const pwd = document.getElementById('password-field');
+    const icon = document.getElementById('toggle-icon');
+    if (pwd.type === 'password') {
+        pwd.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        pwd.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
+
+</body>
+</html>

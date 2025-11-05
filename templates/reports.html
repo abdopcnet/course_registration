@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>إدارة التقارير</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    body {
+        font-family: "Cairo", sans-serif;
+        margin: 0;
+        background-color: #f5f7fb;
+        color: #222;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    
+    header {
+        position: fixed; top:0; left:0; right:0;
+        height:65px; display:flex; align-items:center; justify-content:space-between;
+        background:#fff; color:#1d4ed8; padding:0 25px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.1); z-index:10;
+    }
+    .logo { display:flex; align-items:center; gap:10px; margin-left:15px; }
+    .logo img { width:65px; height:65px; }
+    .logo h2 { font-size:22px; font-weight:700; color:#1d4ed8; }
+
+    .user-info { display:flex; align-items:center; gap:12px; padding:5px 10px; border-radius:12px; background:#e0e7ff; }
+    .user-info img { width:38px; height:38px; border-radius:50%; border:2px solid #1d4ed8; }
+    .user-info span { font-size:16px; font-weight:600; color:#1d4ed8; }
+    .logout-btn { background:none; border:none; color:#dc2626; font-size:20px; cursor:pointer; transition:0.3s; margin-left:8px; }
+    .logout-btn:hover { color:#b91c1c; }
+
+    
+    .sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 230px;
+        height: 100vh;
+        background: linear-gradient(180deg,#0b1a3d,#122052);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        padding-top: 80px; 
+        box-shadow: -3px 0 10px rgba(0,0,0,0.05);
+    }
+    .sidebar h3 { text-align:right; width:100%; padding-right:25px; margin-bottom:25px; font-size:18px; font-weight:600; color:#f0f0f5; }
+    .sidebar a { text-decoration:none; color:#f0f0f0; width:100%; padding:12px 25px; display:flex; align-items:center; gap:10px; transition:all 0.3s ease; font-size:16px; font-weight:500; }
+    .sidebar a i { font-size:17px; }
+    .sidebar a:hover { background-color: rgba(255,255,255,0.15); padding-right:30px; border-radius:8px; }
+
+    .sidebar a.active {
+        background-color: rgba(255, 255, 255, 0.25);
+        border-right: 4px solid #60a5fa;
+        padding-right: 30px;
+        border-radius: 8px 0 0 8px;
+        font-weight: 600;
+        color: #ffffff;
+    }
+    
+    .main-content {
+        margin-right: 230px; 
+        margin-top: 80px;    
+        padding: 30px;
+        height: calc(100vh - 80px);
+        overflow-y: auto;
+    }
+    .main-content h1 { font-size:26px; font-weight:700; color:#1d4ed8; margin-bottom:20px;}
+    .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:25px; }
+    .card {
+        background:#ffffff; border-radius:12px; box-shadow:0 3px 12px rgba(0,0,0,0.08);
+        padding:25px; text-align:center; transition:transform 0.3s ease, box-shadow 0.3s ease; cursor:pointer;
+    }
+    .card:hover { transform:translateY(-5px); box-shadow:0 6px 20px rgba(0,0,0,0.12); }
+    .card i { font-size:40px; color:#2563eb; margin-bottom:10px; }
+    .card h2 { font-size:20px; font-weight:600; color:#2563eb; margin-bottom:10px; }
+    .card p { font-size:16px; font-weight:500; color:#555; }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="user-info">
+        <img src="{% static 'images/user.png' %}" alt="User">
+        <span>عبداللة سويب</span>
+        <button class="logout-btn" title="تسجيل الخروج">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+    </div>
+
+    <div class="logo">
+        <img src="{% static 'images/logoMisurataUni.png' %}" alt="Logo">
+    </div>
+</header>
+
+<div class="sidebar">
+    <h3>القائمة</h3>
+    <a href="{% url 'admin_dashbord' %}" class="{% if '/admin_dashbord' in request.path %}active{% endif %}"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a>
+    <a href="{% url 'materials_page' %}" class="{% if '/materials' in request.path %}active{% endif %}"><i class="fa-solid fa-book"></i> المواد</a>
+    <a href="{% url 'students_page' %}" class="{% if '/students' in request.path %}active{% endif %}"><i class="fa-solid fa-user-graduate"></i> الطلاب</a>
+    <a href="{% url 'sections_page' %}" class="{% if '/sections' in request.path %}active{% endif %}"><i class="fa-solid fa-layer-group"></i> الأقسام</a>
+    <a href="{% url 'reports_page' %}" class="{% if '/reports' in request.path %}active{% endif %}"><i class="fa-solid fa-chart-line"></i> التقارير</a>
+</div>
+
+<div class="main-content">
+    <h1>إدارة التقارير</h1>
+    <div class="cards">
+        <div class="card">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <h2>نتائج الطلاب</h2>
+            <p>عرض نتائج الطلاب</p>
+        </div>
+        <div class="card">
+            <i class="fa-solid fa-chart-line"></i>
+            <h2>تحليل الرسوب و النجاح</h2>
+            <p>عرض تحليل الرسوب و النجاح</p>
+        </div>
+        <div class="card">
+            <i class="fa-solid fa-building-columns"></i>
+            <h2>تحليل الأقسام</h2>
+            <p>عرض تحليل أقسام الكلية</p>
+        </div>
+        <div class="card">
+            <i class="fa-solid fa-book-open"></i>
+            <h2>أكثر مادة طلبًا</h2>
+            <p>عرض أكثر المواد طلبًا</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
