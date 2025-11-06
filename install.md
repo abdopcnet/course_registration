@@ -28,10 +28,33 @@ sudo systemctl start postgresql
 sudo systemctl enable postgresql
 ```
 
-### Step 2: Set Up Python Environment
+### Step 2: Create Project Directory
 
 ```bash
+# Create project directory structure
+sudo mkdir -p /var/www
+sudo mkdir -p /var/www/course_registration
+
+# Set ownership (replace $USER with your username if needed)
+sudo chown -R $USER:$USER /var/www/course_registration
+
 # Navigate to project directory
+cd /var/www/course_registration
+```
+
+**Note:** If you're cloning from git, use this instead:
+```bash
+sudo mkdir -p /var/www
+cd /var/www
+git clone https://github.com/abdopcnet/course_registration.git course_registration
+cd course_registration
+sudo chown -R $USER:$USER /var/www/course_registration
+```
+
+### Step 3: Set Up Python Environment
+
+```bash
+# Make sure you're in the project directory
 cd /var/www/course_registration
 
 # Create virtual environment
@@ -49,7 +72,7 @@ pip install Django>=4.2,<4.3 psycopg2-binary>=2.9 python-dotenv>=0.21 gunicorn>=
 
 **Note:** If you have a `requirements.txt` file, use: `pip install -r requirements.txt`
 
-### Step 3: Run Automated Setup Script
+### Step 4: Run Automated Setup Script
 
 The `scripts/setup.sh` script handles database setup, migrations, and admin user creation:
 
@@ -68,7 +91,7 @@ This script automatically:
 - ✅ Runs Django migrations
 - ✅ Creates admin superuser (username: `admin`, password: `123123`)
 
-### Step 4: Start the Server
+### Step 5: Start the Server
 
 ```bash
 # Activate virtual environment (if not already active)
