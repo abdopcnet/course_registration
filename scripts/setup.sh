@@ -30,7 +30,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Step 1: Check if virtual environment exists
-echo -e "${YELLOW}[1/5] Checking virtual environment...${NC}"
+echo -e "${YELLOW}[1/6] Checking virtual environment...${NC}"
 if [ ! -d "$VENV_DIR" ]; then
     echo -e "${RED}Error: Virtual environment not found at $VENV_DIR${NC}"
     exit 1
@@ -38,12 +38,12 @@ fi
 echo -e "${GREEN}✓ Virtual environment found${NC}"
 
 # Step 2: Activate virtual environment
-echo -e "${YELLOW}[2/5] Activating virtual environment...${NC}"
+echo -e "${YELLOW}[2/6] Activating virtual environment...${NC}"
 source "$VENV_DIR/bin/activate"
 echo -e "${GREEN}✓ Virtual environment activated${NC}"
 
 # Step 3: Check if PostgreSQL is running
-echo -e "${YELLOW}[3/5] Checking PostgreSQL service...${NC}"
+echo -e "${YELLOW}[3/6] Checking PostgreSQL service...${NC}"
 if ! systemctl is-active --quiet postgresql 2>/dev/null && ! pg_isready -h localhost >/dev/null 2>&1; then
     echo -e "${RED}Error: PostgreSQL is not running${NC}"
     exit 1
@@ -51,7 +51,7 @@ fi
 echo -e "${GREEN}✓ PostgreSQL is running${NC}"
 
 # Step 4: Create database if it doesn't exist
-echo -e "${YELLOW}[4/5] Setting up database...${NC}"
+echo -e "${YELLOW}[4/6] Setting up database...${NC}"
 if sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw "$DB_NAME"; then
     echo -e "${GREEN}✓ Database '$DB_NAME' already exists${NC}"
 else
@@ -69,7 +69,7 @@ EOF
 fi
 
 # Step 5: Run migrations
-echo -e "${YELLOW}[5/5] Running Django migrations...${NC}"
+echo -e "${YELLOW}[5/6] Running Django migrations...${NC}"
 cd "$PROJECT_DIR"
 python3 manage.py migrate --noinput
 echo -e "${GREEN}✓ Migrations completed${NC}"
