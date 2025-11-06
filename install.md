@@ -28,27 +28,26 @@ sudo systemctl start postgresql
 sudo systemctl enable postgresql
 ```
 
-### Step 2: Create Project Directory
+### Step 2: Clone Project from Git
 
 ```bash
-# Create project directory structure
+# Create parent directory
 sudo mkdir -p /var/www
-sudo mkdir -p /var/www/course_registration
+
+# Clone the repository
+cd /var/www
+git clone https://github.com/abdopcnet/course_registration.git course_registration
+
+# Navigate to project directory
+cd course_registration
 
 # Set ownership (replace $USER with your username if needed)
 sudo chown -R $USER:$USER /var/www/course_registration
-
-# Navigate to project directory
-cd /var/www/course_registration
 ```
 
-**Note:** If you're cloning from git, use this instead:
+**Note:** If the project already exists locally, navigate to it:
 ```bash
-sudo mkdir -p /var/www
-cd /var/www
-git clone https://github.com/abdopcnet/course_registration.git course_registration
-cd course_registration
-sudo chown -R $USER:$USER /var/www/course_registration
+cd /var/www/course_registration
 ```
 
 ### Step 3: Set Up Python Environment
