@@ -108,6 +108,38 @@ Access the application at:
 - **Admin Panel:** http://localhost:8000/admin/
 - **Admin Credentials:** username: `admin`, password: `123123`
 
+## Short commands (quick)
+
+```bash
+# go to project and activate venv
+cd /var/www/course_registration
+source .venv/bin/activate
+
+# install Python deps (quote version specs)
+pip install "Django>=4.2,<4.3" "psycopg2-binary>=2.9" "python-dotenv>=0.21" "gunicorn>=20.1" "whitenoise>=6.5"
+
+# run setup (creates DB, runs migrations, creates admin)
+chmod +x scripts/setup.sh
+sudo ./scripts/setup.sh
+
+# run development server (foreground)
+python3 manage.py runserver 0.0.0.0:8000
+
+# quick background dev server (logs -> logs/server.log)
+mkdir -p logs
+nohup python3 manage.py runserver 0.0.0.0:8000 &> logs/server.log &
+
+# install/start systemd service (uses scripts/course_service.sh)
+sudo /var/www/course_registration/scripts/course_service.sh install
+sudo service course_service start
+sudo service course_service stop
+sudo service course_service restart
+sudo service course_service status
+
+# view service logs
+sudo journalctl -u course_service -f
+```
+
 ## Manual Setup (Alternative)
 
 If you prefer manual setup instead of using `setup.sh`:
@@ -172,14 +204,17 @@ sudo systemctl status postgresql
 rm -rf .venv
 python3 -m venv .venv
 source .venv/bin/activate
-pip install Django>=4.2,<4.3 psycopg2-binary>=2.9 python-dotenv>=0.21 gunicorn>=20.1 whitenoise>=6.5
+python3 -m pip --version && python3 -m pip install --upgrade pip
+pip install "Django>=4.2,<4.3" "psycopg2-binary>=2.9" "python-dotenv>=0.21" "gunicorn>=20.1" "whitenoise>=6.5"
+pip list --format=columns | egrep "Django|psycopg2-binary|python-dotenv|gunicorn|whitenoise" || true
 ```
 
 ### Permission Issues
 
 ```bash
-sudo chown -R $USER:$USER /var/www/course_registration
+sudo chown -R root:root /var/www/course_registration
 chmod +x scripts/setup.sh
+
 ```
 
 ## Production Notes
