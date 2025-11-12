@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-4w4l!1elws#6e+56f2u79+7&b$t90wed4^x6imuznrpcgwa1h_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '192.168.100.102']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '192.168.100.102', 'course.alkhaleej.store']
+
+# When running behind a proxy (Cloudflare, nginx, etc.) set this so Django
+# knows the original scheme. Only set this if your proxy sets
+# X-Forwarded-Proto correctly.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
 
 
 # Application definition
